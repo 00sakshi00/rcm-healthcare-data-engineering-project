@@ -1,0 +1,142 @@
+part 2 
+
+implement silver layer
+clean/ CDM/ SCD2/ delta tables
+implement gold layer
+facts and dims
+implementing key vault
+improve naming conventions
+make adf pl parallel
+API's
+Claims data
+is_active flag implementation
+implement unit catalog - 
+	right now it is hive metastore local to workspace other workspace
+	centralized metadata repository
+
+
+
+
+EMR (sqlDB) -> bronze
+Claims Data -> Landing (Insurance provider dumps claims data to landing)
+NPI/ICD Codes(API's) -> bronze
+CPT Code -> Landing
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+Bronze Layer (parquet)
+==============
+
+=> emr data from sqlDB to bronze
+=> claims data from landing to bronze
+=> NPI and ICD data (call api) to bronze
+=> CPT data from landing to bronze
+
+
+ICD Code - disease code
+CPT Code - procedure code
+
+
+Silver Layer (Bronze to Silver)
+================================
+clean
+CDM (common data model)
+SCD2 (slowly changing dimension) for history
+Delta table
+
+
+Gold Layer 
+==============
+Fact table
+Dimensions table
+
+
+
+best Practices/ Enhacements
+============================= 
+implement key vault
+improvise on naming conventions
+make adf pipeline run parallel
+is_active flag implementation
+Unity catalog implementation
+adding retries
+
+
+
+Few things to note :-
+data discrepancy and some join opr not working- data generated through faker module
+
+
+
+catalog name -> schema name(db name) -> table name
+
+
+KEY VAULT - will do later
+
+
+
+pipeline 
+emr_src_to_landing_new
+=> implemented the active/inactive flag
+=> made pipeline from sequential to parallel
+
+
+claims & CPT -> landing to bronze
+NPI & ICD -> api to bronze
+
+. NPI code starts with 1 but its diff in our dataset
+. Data extracted from API is very less so we have lot of nulls in joins
+
+
+
+Bronze to silver
+======================
+EMR Data
+ - Patients SCD2
+ - Providers (full load)
+ - Department (full load)
+ - Transactions SCD2
+ - Encounters SCD2
+
+Claims & CPT SCD2
+NPI and ICD codes  SCD2
+
+
+complete refresh scenario(full load), SCD2
+
+PATIENTs
+
+for patients we implement SCD2
+	common data model (CDM) -> cdm_patients
+	Quality checks -> is_quarantied
+	
+SCD2
+->inserted_date TIMESTAMP,
+->modified_date TIMESTAMP,
+->is_current BOOLEAN
+
+
+saksi - Hyderabad (himayat nagar)
+inserted date - 11th Nov 2022
+modified date - 11th Nov 2022
+is_current true
+
+modified date - 1st Jan 2024
+is_current false
+
+sakshi - Hyderabad (Tarnaka)
+inserted date -	1st Jan 2024
+modified date -   1st Jan 2024
+is_active - true
+
+
+target table - silver.patients
+
+source table - quality_checks
+
