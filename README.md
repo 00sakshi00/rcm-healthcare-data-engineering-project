@@ -52,3 +52,5 @@ Breakdown-
 	2. Days in AR
 	Suppose 1 million USD in 100 days => 10000 USD per day
 	400 USD AR => 40days pending
+
+![image](https://github.com/user-attachments/assets/b1ef60f3-3403-4adf-84b0-35e7e50f761b)
